@@ -1,5 +1,8 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +23,22 @@ public class EmployeeDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
 		 */
-		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root", "root");
+        	con.createStatement().executeQuery(
+        			"INSERT INTO Person VALUES (\'" + employee.getEmployeeID() + "\', \'"
+        			+ employee.getPassword() + "\', \'" + employee.getFirstName() + "\', \'" + employee.getLastName()
+        			+ "\', \'" + employee.getAddress() + "\', \'" + employee.getCity() + "\', \'" + employee.getState()
+        			+ "\', " + employee.getZipCode() + ", NULL, NULL, \'" + employee.getEmail() + "\', \'"
+        			+ employee.getTelephone() + "\'); INSERT INTO Employee (\'" + employee.getEmployeeID() + "\', \'"
+        			+ employee.getEmployeeRole() + "\', \'" + employee.getStartDate() + "\', "
+        			+ employee.getHourlyRate() + ")");
+        } catch (Exception e) {
+        	System.out.println(e);
+        	return "failure";
+        }
+        return "success";
 
 	}
 
@@ -36,9 +51,7 @@ public class EmployeeDao {
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		return this.addEmployee(employee);
 
 	}
 
@@ -49,9 +62,15 @@ public class EmployeeDao {
 		 * You need to handle the database deletion and return "success" or "failure" based on result of the database deletion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root", "root");
+        	con.createStatement().executeQuery("DELETE FROM Employee WHERE SSN = \'" + employeeID + "\')");
+        } catch (Exception e) {
+        	System.out.println(e);
+        	return "failure";
+        }
+        return "success";
 
 	}
 
@@ -66,24 +85,29 @@ public class EmployeeDao {
 
 		List<Employee> employees = new ArrayList<Employee>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Employee employee = new Employee();
-			employee.setEmail("shiyong@cs.sunysb.edu");
-			employee.setFirstName("Shiyong");
-			employee.setLastName("Lu");
-			employee.setEmployeeRole("CustRep");
-			employee.setAddress("123 Success Street");
-			employee.setCity("Stony Brook");
-			employee.setStartDate("2006-10-17");
-			employee.setState("NY");
-			employee.setZipCode(11790);
-			employee.setTelephone("5166328959");
-			employee.setEmployeeID("631-413-5555");
-			employee.setHourlyRate(100);
-			employees.add(employee);
-		}
-		/*Sample data ends*/
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person)");
+        	while (rs.next()) {
+        		Employee employee = new Employee();
+    			employee.setEmail(rs.getString("Email"));
+    			employee.setFirstName(rs.getString("FirstName"));
+    			employee.setLastName(rs.getString("LastName"));
+    			employee.setEmployeeRole(rs.getString("EmployeeRole"));
+    			employee.setAddress(rs.getString("Street"));
+    			employee.setCity(rs.getString("City"));
+    			employee.setStartDate(rs.getString("StartDate"));
+    			employee.setState(rs.getString("State"));
+    			employee.setZipCode(rs.getInt("ZIpcode"));
+    			employee.setTelephone(rs.getString("Telephone"));
+    			employee.setEmployeeID(rs.getString("SSN"));
+    			employee.setHourlyRate(rs.getFloat("HourlyRate"));
+    			employees.add(employee);
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
 		
 		return employees;
 	}

@@ -23,6 +23,15 @@ public class Customer {
     private String dateLastActive;
     private String creditCard;
     private int rating;
+    private String password;
+    
+    public String getPassword() {
+    	return password;
+    }
+
+    public void setPassword(String p) {
+    	this.password = p;
+    }
 
     public String getFirstName() {
         return firstName;

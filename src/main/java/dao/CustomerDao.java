@@ -33,7 +33,8 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Account FULL JOIN Person FULL JOIN User)");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT * FROM (Account FULL JOIN Person ON Account.SSN = Person.SSN FULL JOIN Account.SSN ON User.OwnerSSN)");
         	while (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));
@@ -86,7 +87,8 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM (Account FULL JOIN Person FULL JOIN User) WHERE SSN = \'" + customerID + "\'");
+        		"SELECT * FROM (Account FULL JOIN Person ON Account.SSN = Person.SSN FULL JOIN User ON Account.SSN = User.SSN) WHERE SSN = \'"
+        		+ customerID + "\'");
         	if (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));
@@ -210,11 +212,11 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM (Likes FULL JOIN Person FULL JOIN Profile FULL JOIN User) GROUP BY Liker ORDER BY COUNT(Liker) DESC");
+        		"SELECT * FROM (Likes FULL JOIN Profile ON Likes.Liker = Profile.ProfileID FULL JOIN User ON Profile.OwnerSSN = User.SSN) GROUP BY Liker ORDER BY COUNT(Liker) DESC");
         	while (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));
-    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserID(rs.getString("ProfileID"));
     			customer.setUserSSN(rs.getString("SSN"));
     			customer.setFirstName(rs.getString("FirstName"));
     			customer.setLastName(rs.getString("LastName"));

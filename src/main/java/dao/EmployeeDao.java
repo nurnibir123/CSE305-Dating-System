@@ -88,7 +88,7 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person)");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person ON Employee.SSN = Person.SSN)");
         	while (rs.next()) {
         		Employee employee = new Employee();
     			employee.setEmail(rs.getString("Email"));
@@ -123,7 +123,8 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person)");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person ON Employee.SSN = Person.SSN) WHERE Person.Email = \'"
+        		+ employeeID + "\'");
         	rs.next();
     		Employee employee = new Employee();
 			employee.setEmail(rs.getString("Email"));

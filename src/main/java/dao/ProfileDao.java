@@ -23,7 +23,7 @@ public class ProfileDao {
     		try {
 	
     		Class.forName("com.mysql.cj.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT * FROM Profile");
 	        
@@ -61,7 +61,7 @@ public class ProfileDao {
     	try {
     		
     		Class.forName("com.mysql.cj.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT * FROM Profile AS P WHERE P.Age=" + age);
 	        
@@ -98,7 +98,7 @@ public class ProfileDao {
     	try {
     		
     		Class.forName("com.mysql.cj.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT * FROM Profile AS P WHERE P.Weight=" + weight);
 	        
@@ -135,7 +135,7 @@ public class ProfileDao {
     	try {
     		
     		Class.forName("com.mysql.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT * FROM Profile AS P WHERE P.Height=" + height);
 	        
@@ -172,7 +172,7 @@ public class ProfileDao {
     	try {
     		
     		Class.forName("com.mysql.cj.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT * FROM Profile AS P WHERE P.HairColor='"+hairColor+"'");
 	        

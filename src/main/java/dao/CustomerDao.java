@@ -32,7 +32,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Account FULL JOIN Person FULL JOIN User)");
         	while (rs.next()) {
         		Customer customer = new Customer();
@@ -84,7 +84,7 @@ public class CustomerDao {
 		
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT * FROM (Account FULL JOIN Person FULL JOIN User) WHERE SSN = \'" + customerID + "\'");
         	if (rs.next()) {
@@ -125,7 +125,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().executeQuery("DELETE * FROM Account WHERE SSN = \'" + customerID + "\'");
         	return "success";
 		} catch (Exception e) {
@@ -144,7 +144,7 @@ public class CustomerDao {
 		 */
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM Person WHERE Email = \'" + username + "\'");
         	if (rs.next()) {
     			return rs.getString("SSN");
@@ -168,7 +168,7 @@ public class CustomerDao {
 		
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().executeQuery(
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
@@ -208,7 +208,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT * FROM (Likes FULL JOIN Person FULL JOIN Profile FULL JOIN User) GROUP BY Liker ORDER BY COUNT(Liker) DESC");
         	while (rs.next()) {
@@ -249,7 +249,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT Date.Profile1 FROM User, Date WHERE Date.Profile2 = \'" + primary
         		+ "\' UNION SELECT Date.Profile2 FROM User, Date WHERE Date.Profile1 = \'" + primary + "\';");
@@ -291,7 +291,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT Profile1 FROM Date ORDER BY (SELECT Sum(User2Rating) FROM Date WHERE Profile1 = Date.Profile1) DESC;");
         	while (rs.next()) {
@@ -333,7 +333,7 @@ public class CustomerDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT p.* FROM Profile p, Date d WHERE d.Profile1 = \'"
         		+ userID + "\' AND d.Profile2 = p.ProfileID AND (User1Rating+User2Rating) > 3");

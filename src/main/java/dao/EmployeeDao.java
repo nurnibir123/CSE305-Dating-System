@@ -25,7 +25,7 @@ public class EmployeeDao {
 		 */
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().executeQuery(
         			"INSERT INTO Person VALUES (\'" + employee.getEmployeeID() + "\', \'"
         			+ employee.getPassword() + "\', \'" + employee.getFirstName() + "\', \'" + employee.getLastName()
@@ -64,7 +64,7 @@ public class EmployeeDao {
 		
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().executeQuery("DELETE FROM Employee WHERE SSN = \'" + employeeID + "\')");
         } catch (Exception e) {
         	System.out.println(e);
@@ -87,7 +87,7 @@ public class EmployeeDao {
 		
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person)");
         	while (rs.next()) {
         		Employee employee = new Employee();
@@ -122,7 +122,7 @@ public class EmployeeDao {
 		
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person)");
         	rs.next();
     		Employee employee = new Employee();
@@ -154,7 +154,7 @@ public class EmployeeDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery("SELECT SSN FROM Person WHERE Email = \'" + username + "\'");
         	rs.next();
 			return rs.getString("SSN");

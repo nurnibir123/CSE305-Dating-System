@@ -21,7 +21,7 @@ public class LikesDao {
 
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().executeQuery("INSERT INTO Likes VALUES (\'" + user1 + "\', \'" + user2 + "\', NOW())");
 		} catch (Exception e) {
         	System.out.println(e);
@@ -36,7 +36,7 @@ public class LikesDao {
 		List<String> favs = new ArrayList<>();
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
-        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT L.Likee FROM Profile AS P INNER JOIN Likes AS L ON P.ProfileID=L.Liker WHERE P.ProfileID=\'" + mw + "\'");
         	while (rs.next()) {

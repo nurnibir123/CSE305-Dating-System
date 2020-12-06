@@ -22,7 +22,7 @@ public class CustomerDao {
 		/*
 		 * This method fetches one or more customers and returns it as an ArrayList
 		 */
-		
+
 		List<Customer> customers = new ArrayList<Customer>();
 
 		/*
@@ -69,30 +69,8 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * Each customer record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
-		
-		/*
-		 *
-		 */
 
-		
-		List<Customer> customers = new ArrayList<Customer>();
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
-		}
-		/*Sample data ends*/
-		
-		return customers;
+		return this.getCustomers();
 	}
 
 	public Customer getCustomer(String customerID) {
@@ -104,22 +82,37 @@ public class CustomerDao {
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
 		
-		/*Sample data begins*/
-		Customer customer = new Customer();
-		customer.setUserID("111-11-1111");
-		customer.setAddress("123 Success Street");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setCity("Stony Brook");
-		customer.setState("NY");
-		customer.setEmail("shiyong@cs.sunysb.edu");
-		customer.setZipCode(11790);
-		customer.setTelephone("5166328959");
-		customer.setCreditCard("1234567812345678");
-		customer.setRating(1);
-		/*Sample data ends*/
-		
-		return customer;
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT * FROM (Account FULL JOIN Person FULL JOIN User) WHERE SSN = \'" + customerID + "\'");
+        	if (rs.next()) {
+        		Customer customer = new Customer();
+        		customer.setPassword(rs.getString("Password"));
+    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserSSN(rs.getString("SSN"));
+    			customer.setFirstName(rs.getString("FirstName"));
+    			customer.setLastName(rs.getString("LastName"));
+    			customer.setAddress(rs.getString("Street"));
+    			customer.setCity(rs.getString("City"));
+    			customer.setState(rs.getString("State"));
+    			customer.setZipCode(rs.getInt("Zipcode"));
+    			customer.setTelephone(rs.getString("Telephone"));
+    			customer.setEmail(rs.getString("Email"));
+    			customer.setAccNum(rs.getString("AcctNum"));
+    			customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+    			customer.setCreditCard(rs.getString("CardNumber"));
+    			customer.setPpp(rs.getString("PPP"));
+    			customer.setRating(rs.getInt("Rating"));
+    			customer.setDateLastActive(rs.getString("DateOfLastAct"));
+    			return customer;
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+
+		return null;
 	}
 	
 	public String deleteCustomer(String customerID) {
@@ -130,10 +123,15 @@ public class CustomerDao {
 		 * customerID, which is the Customer's ID who's details have to be deleted, is given as method parameter
 		 */
 
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
-		
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	con.createStatement().executeQuery("DELETE * FROM Account WHERE SSN = \'" + customerID + "\'");
+        	return "success";
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+		return "failure";
 	}
 
 
@@ -144,8 +142,17 @@ public class CustomerDao {
 		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
 		 * The Customer's ID is required to be returned as a String
 		 */
-
-		return "111-11-1111";
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM Person WHERE Email = \'" + username + "\'");
+        	if (rs.next()) {
+    			return rs.getString("SSN");
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+		return null;
 	}
 
 
@@ -159,9 +166,22 @@ public class CustomerDao {
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
+        		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
+        		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"
+        		+ customer.getEmail() + "\', \'" + customer.getTelephone() + "\'); INSERT INTO User VALUES (\'" + customer.getUserID()
+        		+ "\', \'" + customer.getPpp() + "\', " + customer.getRating() + ", \'" + customer.getDateLastActive()
+        		+ "\'); INSERT INTO Account VALUES (\'" + customer.getUserID() + "\', " + customer.getCreditCard() + ", \'"
+        		+ customer.getAccNum() + "\', \'" + customer.getAccCreateDate() + "\')");
+        	return "success";
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+		return "failure";
 
 	}
 
@@ -173,11 +193,7 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
-		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
-
+		return this.addCustomer(customer);
 	}
 
 
@@ -185,75 +201,45 @@ public class CustomerDao {
 	public List<Customer>  getMostActiveUser(){
 		List<Customer> customers = new ArrayList<Customer>();
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setUserSSN("112-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
-		}
-		/*Sample data ends*/
+		/*
+		 * The students code to fetch data from the database will be written here
+		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
+		 */
+
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT * FROM (Likes FULL JOIN Person FULL JOIN Profile FULL JOIN User) GROUP BY Liker ORDER BY COUNT(Liker) DESC");
+        	while (rs.next()) {
+        		Customer customer = new Customer();
+        		customer.setPassword(rs.getString("Password"));
+    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserSSN(rs.getString("SSN"));
+    			customer.setFirstName(rs.getString("FirstName"));
+    			customer.setLastName(rs.getString("LastName"));
+    			customer.setAddress(rs.getString("Street"));
+    			customer.setCity(rs.getString("City"));
+    			customer.setState(rs.getString("State"));
+    			customer.setZipCode(rs.getInt("Zipcode"));
+    			customer.setTelephone(rs.getString("Telephone"));
+    			customer.setEmail(rs.getString("Email"));
+    			customer.setAccNum(rs.getString("AcctNum"));
+    			customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+    			customer.setCreditCard(rs.getString("CardNumber"));
+    			customer.setPpp(rs.getString("PPP"));
+    			customer.setRating(rs.getInt("Rating"));
+    			customer.setDateLastActive(rs.getString("DateOfLastAct"));
+    			customers.add(customer);
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
 
 		return customers;
 	}
 
 	public List<Customer> getDatedCustomers(String primary){
-
-		List<Customer> customers = new ArrayList<Customer>();
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
-		}
-		/*Sample data ends*/
-
-		return customers;
-	}
-
-	public List<Customer> getHighestRatedCustomer(){
-		List<Customer> customers = new ArrayList<Customer>();
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setUserSSN("112-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Upendra Nath Chaurasia");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("uppu_chaur@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);
-		}
-		/*Sample data ends*/
-
-		return customers;
-	}
-
-
-	public List<Customer> getDateSuggestions(String userID) {
-		/*
-		 * This method fetches one or more customers and returns it as an ArrayList
-		 */
-
 		List<Customer> customers = new ArrayList<Customer>();
 
 		/*
@@ -261,27 +247,120 @@ public class CustomerDao {
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
 
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setUserID("111-11-1111");
-			customer.setFirstName("long");
-			customer.setLastName("Lu");
-			customer.setAddress("123 Success Street12");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setZipCode(11790);
-			customer.setTelephone("5166328959");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setAccNum("12345");
-			customer.setAccCreateDate("12-12-2020");
-			customer.setCreditCard("1234567812345678");
-			customer.setPpp("User");
-			customer.setRating(1);
-			customer.setDateLastActive("12-12-2020");
-			customers.add(customer);
-		}
-		/*Sample data ends*/
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT Date.Profile1 FROM User, Date WHERE Date.Profile2 = \'" + primary
+        		+ "\' UNION SELECT Date.Profile2 FROM User, Date WHERE Date.Profile1 = \'" + primary + "\';");
+        	while (rs.next()) {
+        		Customer customer = new Customer();
+        		customer.setPassword(rs.getString("Password"));
+    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserSSN(rs.getString("SSN"));
+    			customer.setFirstName(rs.getString("FirstName"));
+    			customer.setLastName(rs.getString("LastName"));
+    			customer.setAddress(rs.getString("Street"));
+    			customer.setCity(rs.getString("City"));
+    			customer.setState(rs.getString("State"));
+    			customer.setZipCode(rs.getInt("Zipcode"));
+    			customer.setTelephone(rs.getString("Telephone"));
+    			customer.setEmail(rs.getString("Email"));
+    			customer.setAccNum(rs.getString("AcctNum"));
+    			customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+    			customer.setCreditCard(rs.getString("CardNumber"));
+    			customer.setPpp(rs.getString("PPP"));
+    			customer.setRating(rs.getInt("Rating"));
+    			customer.setDateLastActive(rs.getString("DateOfLastAct"));
+    			customers.add(customer);
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+
+		return customers;
+	}
+
+	public List<Customer> getHighestRatedCustomer(){
+		List<Customer> customers = new ArrayList<Customer>();
+
+		/*
+		 * The students code to fetch data from the database will be written here
+		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
+		 */
+
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT Profile1 FROM Date ORDER BY (SELECT Sum(User2Rating) FROM Date WHERE Profile1 = Date.Profile1) DESC;");
+        	while (rs.next()) {
+        		Customer customer = new Customer();
+        		customer.setPassword(rs.getString("Password"));
+    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserSSN(rs.getString("SSN"));
+    			customer.setFirstName(rs.getString("FirstName"));
+    			customer.setLastName(rs.getString("LastName"));
+    			customer.setAddress(rs.getString("Street"));
+    			customer.setCity(rs.getString("City"));
+    			customer.setState(rs.getString("State"));
+    			customer.setZipCode(rs.getInt("Zipcode"));
+    			customer.setTelephone(rs.getString("Telephone"));
+    			customer.setEmail(rs.getString("Email"));
+    			customer.setAccNum(rs.getString("AcctNum"));
+    			customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+    			customer.setCreditCard(rs.getString("CardNumber"));
+    			customer.setPpp(rs.getString("PPP"));
+    			customer.setRating(rs.getInt("Rating"));
+    			customer.setDateLastActive(rs.getString("DateOfLastAct"));
+    			customers.add(customer);
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+
+		return customers;
+	}
+
+
+	public List<Customer> getDateSuggestions(String userID) {
+		List<Customer> customers = new ArrayList<Customer>();
+
+		/*
+		 * The students code to fetch data from the database will be written here
+		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
+		 */
+
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSE305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT p.* FROM Profile p, Date d WHERE d.Profile1 = \'"
+        		+ userID + "\' AND d.Profile2 = p.ProfileID AND (User1Rating+User2Rating) > 3");
+        	while (rs.next()) {
+        		Customer customer = new Customer();
+        		customer.setPassword(rs.getString("Password"));
+    			customer.setUserID(rs.getString("SSN"));
+    			customer.setUserSSN(rs.getString("SSN"));
+    			customer.setFirstName(rs.getString("FirstName"));
+    			customer.setLastName(rs.getString("LastName"));
+    			customer.setAddress(rs.getString("Street"));
+    			customer.setCity(rs.getString("City"));
+    			customer.setState(rs.getString("State"));
+    			customer.setZipCode(rs.getInt("Zipcode"));
+    			customer.setTelephone(rs.getString("Telephone"));
+    			customer.setEmail(rs.getString("Email"));
+    			customer.setAccNum(rs.getString("AcctNum"));
+    			customer.setAccCreateDate(rs.getString("AcctCreationDate"));
+    			customer.setCreditCard(rs.getString("CardNumber"));
+    			customer.setPpp(rs.getString("PPP"));
+    			customer.setRating(rs.getInt("Rating"));
+    			customer.setDateLastActive(rs.getString("DateOfLastAct"));
+    			customers.add(customer);
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
 
 		return customers;
 	}

@@ -129,7 +129,7 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeQuery("DELETE * FROM Account WHERE SSN = \'" + customerID + "\'");
+        	con.createStatement().execute("DELETE * FROM Account WHERE SSN = \'" + customerID + "\'");
         	return "success";
 		} catch (Exception e) {
         	System.out.println(e);
@@ -172,7 +172,7 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeQuery(
+        	con.createStatement().execute(
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
         		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"

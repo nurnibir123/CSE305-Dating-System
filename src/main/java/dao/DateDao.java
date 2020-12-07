@@ -173,11 +173,7 @@ public class DateDao {
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
 			// open dates doesn't have ratings yet
-			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
-					+ "FROM Profile AS P "
-					+ "INNER JOIN Date AS D "
-					+ "ON P.ProfileID=D.Profile1 "
-					+ "D.Date_Time >= NOW()");
+			ResultSet rs = st.executeQuery("SELECT * FROM Date");
 			
 			while(rs.next()) {
 				Date date = new Date();

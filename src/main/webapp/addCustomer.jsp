@@ -31,7 +31,7 @@
 	<form action="addCustomer" method="POST">
 		<div class="form-group">
 			<label for="customerSSN">SSN</label>
-			<input type="email" class="form-control" id="customerSSN" name="customerSSN" placeholder="Enter SSN" required>
+			<input type="text" class="form-control" id="customerSSN" name="customerSSN" placeholder="Enter SSN" required>
 		</div>
 	  <div class="form-group">
 	    <label for="customerEmail">Email address</label>

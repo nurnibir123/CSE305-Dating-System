@@ -172,7 +172,7 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().execute(
+        	con.createStatement().executeBatch()
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
         		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"

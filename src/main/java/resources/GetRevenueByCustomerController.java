@@ -44,16 +44,16 @@ public class GetRevenueByCustomerController extends HttpServlet {
         /*Sample data begins*/
         for (int i = 0; i < 10; i++) {
             Date date = new Date();
-            date.setDateID("12313123");
-            date.setUser1ID("1212");
-            date.setUser2ID("2121");
-            date.setDate("12-12-2020");
-            date.setGeolocation("location");
-            date.setBookingfee("21");
-            date.setCustRepresentative("Manoj Pandey");
-            date.setComments("Comments");
-            date.setUser1Rating("3");
-            date.setUser2Rating("3");
+            date.setDateID(request.getParameter(""));
+    		date.setUser1ID(request.getParameter("user1ID"));
+    		date.setUser2ID(request.getParameter("user2ID"));
+    		date.setDate(request.getParameter("date"));
+    		date.setGeolocation(request.getParameter("Location"));
+    		date.setBookingfee(Integer.parseInt(request.getParameter("fee")));
+    		date.setCustRepresentative(request.getParameter("custRep"));
+    		date.setComments(request.getParameter("Comments"));
+    		date.setUser1Rating(Integer.parseInt(request.getParameter("user1Rating")));
+    		date.setUser2Rating(Integer.parseInt(request.getParameter("user2Rating")));
             dates.add(date);
         }
         /*Sample data ends*/

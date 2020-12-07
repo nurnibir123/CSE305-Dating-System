@@ -46,16 +46,16 @@ public class AddNewDateController extends HttpServlet {
 
 
 		Date date = new Date();
-		date.setDateID("1");
-		date.setUser1ID("111");
-		date.setUser2ID("222");
-		date.setDate("12-12-1222");
-		date.setGeolocation("Himachal");
-		date.setBookingfee("22");
-		date.setCustRepresentative("Tom Alter");
-		date.setComments("First date");
-		date.setUser1Rating("1");
-		date.setUser2Rating("2");
+		date.setDateID(request.getParameter(""));
+		date.setUser1ID(request.getParameter("user1ID"));
+		date.setUser2ID(request.getParameter("user2ID"));
+		date.setDate(request.getParameter("date"));
+		date.setGeolocation(request.getParameter("Location"));
+		date.setBookingfee(Integer.parseInt(request.getParameter("fee")));
+		date.setCustRepresentative(request.getParameter("custRep"));
+		date.setComments(request.getParameter("Comments"));
+		date.setUser1Rating(Integer.parseInt(request.getParameter("user1Rating")));
+		date.setUser2Rating(Integer.parseInt(request.getParameter("user2Rating")));
 
 		DateDao dao = new DateDao();
 		String result = dao.addDate(date);

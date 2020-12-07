@@ -6,11 +6,11 @@ public class Date {
 	private String user2ID;
 	private String date;
 	private String geolocation;
-	private String bookingfee;
+	private int bookingfee;
 	private String custRepresentative;
 	private String comments;
-	private String user1Rating;
-	private String user2Rating;
+	private int user1Rating;
+	private int user2Rating;
 
 
 	public String getDateID() {
@@ -53,11 +53,11 @@ public class Date {
 		this.geolocation = geolocation;
 	}
 
-	public String getBookingfee() {
+	public int getBookingfee() {
 		return bookingfee;
 	}
 
-	public void setBookingfee(String bookingfee) {
+	public void setBookingfee(int bookingfee) {
 		this.bookingfee = bookingfee;
 	}
 
@@ -77,19 +77,19 @@ public class Date {
 		this.comments = comments;
 	}
 
-	public String getUser1Rating() {
+	public int getUser1Rating() {
 		return user1Rating;
 	}
 
-	public void setUser1Rating(String user1Rating) {
+	public void setUser1Rating(int user1Rating) {
 		this.user1Rating = user1Rating;
 	}
 
-	public String getUser2Rating() {
+	public int getUser2Rating() {
 		return user2Rating;
 	}
 
-	public void setUser2Rating(String user2Rating) {
+	public void setUser2Rating(int user2Rating) {
 		this.user2Rating = user2Rating;
 	}
 }

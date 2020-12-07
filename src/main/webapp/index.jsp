@@ -26,7 +26,6 @@
 				String email = (String)session.getAttribute("email");
 				String role = (String)session.getAttribute("role");
 //				response.sendRedirect("customerRepresentativeHome.jsp");
-
 				//redirect to home page if already logged in
 				if(email != null) {
 					if(role.equals("manager")) {

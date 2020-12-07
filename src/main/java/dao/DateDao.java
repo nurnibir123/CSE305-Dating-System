@@ -14,13 +14,14 @@ public class DateDao {
 	String dbuser = "root";
 	String dbpass = "root";
 
+	//tested
     public String addDate(Date date) {
     	try {
     		Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
 			
-			String cmd = String.format("INSERT INTO Date VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+			String cmd = String.format("INSERT INTO Date VALUES ('%s', '%s', '%s', '%s', '%s', %d, '%s', %d, %d)", 
 					date.getUser1ID(),
 					date.getUser2ID(),
 					date.getCustRepresentative(),
@@ -30,7 +31,7 @@ public class DateDao {
 					date.getComments(),
 					date.getUser1Rating(),
 					date.getUser2Rating());
-			st.executeQuery(cmd);
+			st.execute(cmd);
     	} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
@@ -39,14 +40,16 @@ public class DateDao {
     }
 
 
+    //tested 
     public List<Date> getDatesByCalendar(String calendarDate) {
         List<Date> dates = new ArrayList<Date>();
         
         try {
+        	System.out.println("changed date: " + calendarDate);
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Date_Time = " + calendarDate);
+			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Date(Date_Time) = Date('" + calendarDate + "')");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -55,11 +58,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -69,6 +72,7 @@ public class DateDao {
         return dates;
     }
 
+    // where?
     public List<Date> getDatesByMonthYear(String month, String year) {
         List<Date> dates = new ArrayList<Date>();
 
@@ -76,7 +80,7 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Date_Time LIKE " + year + "-" + month + "%");
+			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Date(Date_Time) LIKE  Date('" + year + "-" + month + "%')");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -85,11 +89,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -99,6 +103,7 @@ public class DateDao {
         return dates;
     }
 
+    //tested
     public List<Date> getDatesByCustomerName(String customerName) {
         List<Date> dates = new ArrayList<Date>();
 
@@ -106,7 +111,7 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Profile1 = " + customerName + "OR Profile2 = " + customerName);
+			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE Profile1 = '" + customerName + "' OR Profile2 = '" + customerName + "'");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -115,11 +120,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -145,11 +150,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -168,7 +173,11 @@ public class DateDao {
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
 			// open dates doesn't have ratings yet
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE (User1Rating+User2Rating) = 0");
+			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
+					+ "FROM Profile AS P "
+					+ "INNER JOIN Date AS D "
+					+ "ON P.ProfileID=D.Profile1 "
+					+ "D.Date_Time >= NOW()");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -177,11 +186,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -231,7 +240,7 @@ public class DateDao {
     		Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			String cmd = String.format("SELECT SUM(BookingFee) FROM Date WHERE Date_Time LIKE" + year + "-" + month + "%");
+			String cmd = String.format("SELECT SUM(BookingFee) FROM Date WHERE Date_Time LIKE '" + year + "-" + month + "%'");
 			ResultSet rs = st.executeQuery(cmd);
 			return rs.getString(0);
     	} catch(Exception e) {
@@ -247,8 +256,12 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE (User1Rating+User2Rating) = 0 AND Profile1 = " + user + 
-					"UNION SELECT * FROM Date WHERE (User1Rating+User2Rating) = 0 AND Profile2 = " + user);
+			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
+					+ "FROM Profile AS P "
+					+ "INNER JOIN Date AS D "
+					+ "ON P.ProfileID=D.Profile1 "
+					+ "WHERE P.ProfileID='" + user + "' AND "
+					+ "D.Date_Time >= NOW()");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -257,11 +270,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -279,8 +292,12 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM Date WHERE (User1Rating+User2Rating) > 0 AND Profile1 = " + user + 
-					"UNION SELECT * FROM Date WHERE (User1Rating+User2Rating) > 0 AND Profile2 = " + user);
+			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
+					+ "FROM Profile AS P "
+					+ "INNER JOIN Date AS D "
+					+ "ON P.ProfileID=D.Profile1 "
+					+ "WHERE P.ProfileID= '" + user + "' AND "
+					+ "D.Date_Time < NOW() ");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -289,11 +306,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -309,8 +326,11 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT Location FROM Date GROUP BY Location ORDER BY COUNT(*) DESC LIMIT 1 WHERE Profile1 = " + user + 
-					"UNION SELECT Location FROM Date GROUP BY Location ORDER BY COUNT(*) DESC LIMIT 1 WHERE Profile2 = " + user);
+			ResultSet rs = st.executeQuery("SELECT D.Location  "
+					+ "FROM Date AS D "
+					+ "GROUP BY D.Location "
+					+ "ORDER BY COUNT(D.Location) DESC"
+					+ "WHERE D.profile1 = " + user);
 			return rs.getString(0);
         } catch(Exception e) {
         	System.out.println(e);
@@ -327,8 +347,11 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			String cmd = String.format("SELECT p.* FROM Profile p, Date d WHERE d.Profile1 = %s AND d.Profile2 = p.ProfileID AND (User1Rating+User2Rating) > 5"
-					+ "UNION SELECT p.* FROM Profile p, Date d WHERE d.Profile2 = %s AND d.Profile1 = p.ProfileID AND (User1Rating+User2Rating) > 5", user);
+
+			String cmd = String.format("SELECT * FROM Profile "
+					+ "WHERE ProfileID = '%s' "
+					+ "AND INSTR(Profile.Hobbies, hobies) > 0 "
+					+ "AND OwnerSSN <> Profile.OwnerSSN", user);
 			ResultSet rs = st.executeQuery(cmd);
 			
 			while(rs.next()) {
@@ -338,11 +361,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
         } catch(Exception e) {
@@ -369,11 +392,11 @@ public class DateDao {
 				date.setUser2ID(rs.getString("Profile2"));
 				date.setDate(rs.getString("Date_Time"));
 				date.setGeolocation(rs.getString("Location"));
-				date.setBookingfee(rs.getString("BookingFee"));
+				date.setBookingfee(rs.getInt("BookingFee"));
 				date.setCustRepresentative(rs.getString("CustRep"));
 				date.setComments(rs.getString("Comments"));
-				date.setUser1ID(rs.getString("User1Rating"));
-				date.setUser2ID(rs.getString("User2Rating"));
+				date.setUser1Rating(rs.getInt("User1Rating"));
+				date.setUser2Rating(rs.getInt("User2Rating"));
 				dates.add(date);
 			}
     	} catch(Exception e) {

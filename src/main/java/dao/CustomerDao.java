@@ -18,6 +18,7 @@ public class CustomerDao {
 	/**
 	 * @return ArrayList<Customer> object
 	 */
+	// tested
 	public List<Customer> getCustomers() {
 		/*
 		 * This method fetches one or more customers and returns it as an ArrayList
@@ -34,7 +35,7 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM (Account FULL JOIN Person ON Account.SSN = Person.SSN FULL JOIN Account.SSN ON User.OwnerSSN)");
+        		"SELECT * FROM Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = P.SSN AND P.SSN = U.SSN");
         	while (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));

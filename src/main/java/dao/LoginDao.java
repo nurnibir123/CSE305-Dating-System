@@ -11,6 +11,9 @@ public class LoginDao {
 	/*
 	 * This class handles all the database operations related to login functionality
 	 */
+	String dbpath = "jdbc:mysql://localhost:3306/cse305";
+	String dbuser = "root";
+	String dbpass = "root";
 	
 	
 	public Login login(String username, String password) {
@@ -27,7 +30,7 @@ public class LoginDao {
 		try {
     		
     		Class.forName("com.mysql.cj.jdbc.Driver");
-    		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/305project", "root", "root");
+    		Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
     		Statement st = con.createStatement();
     		ResultSet rs = st.executeQuery("SELECT L.Role FROM Login AS L WHERE L.Email='"+username+"' AND L.Password='"+password+"'");
     		
@@ -63,7 +66,7 @@ public class LoginDao {
 		try {      
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "root");
+			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		      ResultSet uprs = stmt.executeQuery("SELECT * FROM COFFEES");
 		      uprs.moveToInsertRow();

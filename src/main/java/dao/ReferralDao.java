@@ -12,7 +12,7 @@ public class ReferralDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeQuery(
+        	con.createStatement().execute(
         		"INSERT TO BlindDate VALUES (\'" + profileA + "\', \'" + profileB + "\', \'" + profileC + "\', NOW())");
 		} catch (Exception e) {
         	System.out.println(e);

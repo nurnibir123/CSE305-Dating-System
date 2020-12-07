@@ -26,7 +26,7 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeQuery(
+        	con.createStatement().execute(
         			"INSERT INTO Person VALUES (\'" + employee.getEmployeeID() + "\', \'"
         			+ employee.getPassword() + "\', \'" + employee.getFirstName() + "\', \'" + employee.getLastName()
         			+ "\', \'" + employee.getAddress() + "\', \'" + employee.getCity() + "\', \'" + employee.getState()
@@ -65,7 +65,7 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeQuery("DELETE FROM Employee WHERE SSN = \'" + employeeID + "\')");
+        	con.createStatement().execute("DELETE FROM Employee WHERE SSN = \'" + employeeID + "\')");
         } catch (Exception e) {
         	System.out.println(e);
         	return "failure";

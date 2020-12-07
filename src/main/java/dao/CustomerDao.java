@@ -34,8 +34,8 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = P.SSN AND P.SSN = U.SSN");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = P.SSN AND P.SSN = U.SSN");
+        	
         	while (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));
@@ -88,8 +88,8 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM (Account FULL JOIN Person ON Account.SSN = Person.SSN FULL JOIN User ON Account.SSN = User.SSN) WHERE SSN = \'"
-        		+ customerID + "\'");
+        		"SELECT * FROM SELECT * FROM  Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = \'" + customerID
+        		+ "P.SSN = \'" + customerID + "\' AND U.SSN = \'" + customerID + "\'");
         	if (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));
@@ -176,9 +176,12 @@ public class CustomerDao {
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
         		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"
-        		+ customer.getEmail() + "\', \'" + customer.getTelephone() + "\'); INSERT INTO User VALUES (\'" + customer.getUserID()
+        		+ customer.getEmail() + "\', \'" + customer.getTelephone() + "\')");
+        	con.createStatement().execute("INSERT INTO User VALUES (\'" + customer.getUserID()
         		+ "\', \'" + customer.getPpp() + "\', " + customer.getRating() + ", \'" + customer.getDateLastActive()
-        		+ "\'); INSERT INTO Account VALUES (\'" + customer.getUserID() + "\', " + customer.getCreditCard() + ", \'"
+        		+ "\')");
+        	con.createStatement().execute(
+        		"INSERT INTO Account VALUES (\'" + customer.getUserID() + "\', " + customer.getCreditCard() + ", \'"
         		+ customer.getAccNum() + "\', \'" + customer.getAccCreateDate() + "\')");
         	return "success";
 		} catch (Exception e) {
@@ -213,7 +216,7 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM (Likes FULL JOIN Profile ON Likes.Liker = Profile.ProfileID FULL JOIN User ON Profile.OwnerSSN = User.SSN) GROUP BY Liker ORDER BY COUNT(Liker) DESC");
+        		"SELECT * FROM SELECT * FROM Likes AS L, Profile AS P, User AS U WHERE L.Liker = P.ProfileID AND P.OwnerSSN = U.SSN ORDER BY COUNT(L.Liker) DESC");
         	while (rs.next()) {
         		Customer customer = new Customer();
         		customer.setPassword(rs.getString("Password"));

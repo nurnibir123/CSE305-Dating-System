@@ -31,7 +31,9 @@ public class EmployeeDao {
         			+ employee.getPassword() + "\', \'" + employee.getFirstName() + "\', \'" + employee.getLastName()
         			+ "\', \'" + employee.getAddress() + "\', \'" + employee.getCity() + "\', \'" + employee.getState()
         			+ "\', " + employee.getZipCode() + ", NULL, NULL, \'" + employee.getEmail() + "\', \'"
-        			+ employee.getTelephone() + "\'); INSERT INTO Employee (\'" + employee.getEmployeeID() + "\', \'"
+        			+ employee.getTelephone() + "\')");
+        	con.createStatement().execute(
+        			"INSERT INTO Employee (\'" + employee.getEmployeeID() + "\', \'"
         			+ employee.getEmployeeRole() + "\', \'" + employee.getStartDate() + "\', "
         			+ employee.getHourlyRate() + ")");
         } catch (Exception e) {
@@ -88,7 +90,7 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person ON Employee.SSN = Person.SSN)");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM Employee AS E, Person AS P WHERE E.SSN = P.SSN)");
         	while (rs.next()) {
         		Employee employee = new Employee();
     			employee.setEmail(rs.getString("Email"));
@@ -123,7 +125,8 @@ public class EmployeeDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	ResultSet rs = con.createStatement().executeQuery("SELECT * FROM (Employee FULL JOIN Person ON Employee.SSN = Person.SSN) WHERE Person.Email = \'"
+        	ResultSet rs = con.createStatement().executeQuery(
+        		"SELECT * FROM Employee AS E, Person AS P WHERE E.SSN = P.SSN AND P.Email = \'"
         		+ employeeID + "\'");
         	rs.next();
     		Employee employee = new Employee();

@@ -41,11 +41,10 @@ public class GetPendingDatesController extends HttpServlet {
 		 * Listing page
 		 */
 
-//		String searchKeyword = request.getParameter("customerName");
-
+		String searchKeyword = request.getParameter("profileID");
+		System.out.println(searchKeyword);
 		DateDao dao = new DateDao();
-		List<Date> dates = dao.getPendingDates("Vikram");
-
+		List<Date> dates = dao.getPendingDates(searchKeyword);
 		request.setAttribute("dates", dates);
 		RequestDispatcher rd = request.getRequestDispatcher("showPendingDates.jsp");
 		rd.forward(request, response);

@@ -88,7 +88,7 @@ public class CustomerDao {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	ResultSet rs = con.createStatement().executeQuery(
-        		"SELECT * FROM SELECT * FROM  Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = \'" + customerID
+        		"SELECT * FROM  Account AS A, Person AS P, User AS U WHERE A.OwnerSSN = \'" + customerID
         		+ "P.SSN = \'" + customerID + "\' AND U.SSN = \'" + customerID + "\'");
         	if (rs.next()) {
         		Customer customer = new Customer();
@@ -129,7 +129,7 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().execute("DELETE * FROM Account WHERE SSN = \'" + customerID + "\'");
+        	con.createStatement().execute("DELETE FROM Account WHERE OwnerSSN = \'" + customerID + "\'");
         	return "success";
 		} catch (Exception e) {
         	System.out.println(e);
@@ -157,6 +157,26 @@ public class CustomerDao {
         }
 		return null;
 	}
+	
+	public String getProfileID(String username) {
+		/*
+		 * This method returns the Customer's ID based on the provided email address
+		 * The students code to fetch data from the database will be written here
+		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
+		 * The Customer's ID is required to be returned as a String
+		 */
+		try {
+    		Class.forName("com.mysql.jdbc.Driver");
+        	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
+        	ResultSet rs = con.createStatement().executeQuery("SELECT Pro.ProfileID FROM Person Per, Profile Pro WHERE Per.Email = \'" + username + "\'");
+        	if (rs.next()) {
+    			return rs.getString("ProfileID");
+        	}
+		} catch (Exception e) {
+        	System.out.println(e);
+        }
+		return null;
+	}
 
 
 	public String addCustomer(Customer customer) {
@@ -172,7 +192,7 @@ public class CustomerDao {
 		try {
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
-        	con.createStatement().executeBatch()
+        	con.createStatement().execute(
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
         		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"
@@ -199,7 +219,15 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
-		return this.addCustomer(customer);
+		try {
+			deleteCustomer(customer.getUserID());
+			System.out.println("breakline");
+			addCustomer(customer);
+		} catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
+		return "success";
 	}
 
 

@@ -3,7 +3,7 @@
 -- Host: localhost    Database: cse305
 -- ------------------------------------------------------
 -- Server version	8.0.22-0ubuntu0.20.04.3
-
+USE CSE305;
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `Date`;
 CREATE TABLE `Date` (
   `Profile1` char(20) NOT NULL DEFAULT '',
   `Profile2` char(20) NOT NULL DEFAULT '',
-  `CustRep` char(11) DEFAULT NULL,
+  `CustRep` char(11) DEFAULT '111-11-1111',
   `Date_Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Location` varchar(100) DEFAULT NULL,
   `BookingFee` int DEFAULT NULL,
@@ -97,6 +97,7 @@ CREATE TABLE `Date` (
   CONSTRAINT `Date_ibfk_3` FOREIGN KEY (`CustRep`) REFERENCES `Employee` (`SSN`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `Date`
@@ -231,6 +232,7 @@ DROP TABLE IF EXISTS `Profile`;
 CREATE TABLE `Profile` (
   `ProfileID` char(20) NOT NULL DEFAULT '',
   `OwnerSSN` char(11) DEFAULT NULL,
+  `Age` int DEFAULT NULL,
   `DatingAgeRangeStart` int DEFAULT NULL,
   `DatingAgeRangeEnd` int DEFAULT NULL,
   `DatinGeoRange` int DEFAULT NULL,
@@ -241,7 +243,6 @@ CREATE TABLE `Profile` (
   `HairColor` varchar(20) DEFAULT NULL,
   `CreationDate` datetime NOT NULL,
   `LastModDate` datetime NOT NULL,
-  `Age` int DEFAULT NULL,
   PRIMARY KEY (`ProfileID`),
   KEY `OwnerSSN` (`OwnerSSN`),
   CONSTRAINT `Profile_ibfk_1` FOREIGN KEY (`OwnerSSN`) REFERENCES `User` (`SSN`) ON DELETE CASCADE
@@ -254,7 +255,14 @@ CREATE TABLE `Profile` (
 
 LOCK TABLES `Profile` WRITE;
 /*!40000 ALTER TABLE `Profile` DISABLE KEYS */;
-INSERT INTO `Profile` VALUES ('',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00',NULL),('Brenna_Berlin','888-88-8888',18,19,21,'8','Female',0,6,'180','0000-00-00 00:00:00','2014-10-04 20:20:55',2014),('DesiraeBerg','999-99-9999',20,17,25,'5','Male',0,6,'200','0000-00-00 00:00:00','2014-10-04 19:13:18',2014),('Fletcher2013','666-66-6666',25,20,28,'18','Female',0,6,'150','0000-00-00 00:00:00','2014-10-04 19:21:37',2014),('Fletcher_Trujillo','666-66-6666',23,19,30,'8','Female',0,6,'150','0000-00-00 00:00:00','2014-10-04 18:26:49',2014),('Isabelle2013','555-55-5555',22,20,22,'29','Female',0,6,'120','0000-00-00 00:00:00','2014-10-04 00:37:12',2014),('Isabelle2014','555-55-5555',22,20,25,'5','Female',0,6,'110','0000-00-00 00:00:00','2014-10-04 22:43:25',2014),('VazquezFromAlajuela','777-77-7777',26,20,28,'15','Male',0,6,'170','0000-00-00 00:00:00','2014-10-04 17:13:30',2014);
+INSERT INTO `Profile` VALUES
+('Brenna_Berlin','888-88-8888',18,19,21,'8','Female','Dance,Acting',5.7,110,'Black','2014-10-04 22:43:25','2014-10-09 11:51:19'),
+('DesiraeBerg','999-99-9999',20,17,25,'5','Male','Water sports,Football',5.7,120,'Black','2014-10-04 00:37:12','2014-10-04 17:08:38'),
+('Fletcher2013','666-66-6666',25,20,28,'18','Female','Reading,Basketball',5.6,150,'Brown','2014-10-04 19:21:37','2014-10-07 00:42:03'),
+('Fletcher_Trujillo','666-66-6666',23,19,30,'8','Female','Shopping,Volleyball',5.6,150,'Brown','2014-10-04 17:13:30','2014-10-07 04:16:43'),
+('Isabelle2013','555-55-5555',22,20,22,'29','Female','Shopping,Dance, Mountain Claiming',5.7,170,'Black','2014-10-04 17:13:30','2014-10-07 04:16:43'),
+('Isabelle2014','555-55-5555',22,20,25,'5','Female','Shopping,Cooking',6,180,'Blonde','2014-10-04 20:20:55','2014-10-07 12:21:58'),
+('VazquezFromAlajuela','777-77-7777',26,20,28,'15','Male','Hunting,Running',5.6,200,'Red','2014-10-04 19:13:18','2014-10-04 15:54:48');
 /*!40000 ALTER TABLE `Profile` ENABLE KEYS */;
 UNLOCK TABLES;
 

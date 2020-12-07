@@ -44,11 +44,11 @@ public class GetFavoritesListController extends HttpServlet {
 		 * Listing page
 		 */
 
-//		String searchKeyword = request.getParameter("customerName");
+		String searchKeyword = request.getParameter("profileID");
 
 		LikesDao dao = new LikesDao();
 
-		List<String> users = dao.getFavorites("Vikram");
+		List<String> users = dao.getFavorites(searchKeyword);
 
 		request.setAttribute("users", users);
 		RequestDispatcher rd = request.getRequestDispatcher("showFavorites.jsp");

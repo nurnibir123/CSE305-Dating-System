@@ -61,10 +61,11 @@ public class LoginController extends HttpServlet {
 			else {
 				CustomerDao customerDao = new CustomerDao();
 				String customerID = customerDao.getCustomerID(username);
+				String profileID = customerDao.getProfileID(username);
 				request.getSession(true).setAttribute("customerID", customerID);
-				response.sendRedirect("home.jsp");	
+				request.getSession(true).setAttribute("profileID", profileID);
+				response.sendRedirect("home.jsp");
 			}
-
 		}
 		else {
 			response.sendRedirect("index.jsp?status=false");

@@ -10,10 +10,13 @@ public class ReferralDao {
 	
 	public String referProfile(String profileA, String profileB, String profileC){		
 		try {
+			System.out.println("ProfileA: " + profileA);
+			System.out.println("ProfileB: " + profileB);
+			System.out.println("ProfileC: " + profileC);
     		Class.forName("com.mysql.jdbc.Driver");
         	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cse305", "root", "root");
         	con.createStatement().execute(
-        		"INSERT TO BlindDate VALUES (\'" + profileA + "\', \'" + profileB + "\', \'" + profileC + "\', NOW())");
+        		"INSERT INTO BlindDate VALUES (\'" + profileA + "\', \'" + profileB + "\', \'" + profileC + "\', NOW())");
 		} catch (Exception e) {
         	System.out.println(e);
         	return "failure";

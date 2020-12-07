@@ -40,7 +40,7 @@ public class LikesDao {
         	ResultSet rs = con.createStatement().executeQuery(
         		"SELECT L.Likee FROM Profile AS P INNER JOIN Likes AS L ON P.ProfileID=L.Liker WHERE P.ProfileID=\'" + mw + "\'");
         	while (rs.next()) {
-        		favs.add(rs.getString(0));
+        		favs.add(rs.getString(1));
         	}
 		} catch (Exception e) {
         	System.out.println(e);

@@ -72,21 +72,21 @@
 							<div class="container">
 								<form action="pendingDates">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value=${email}>
+										<input type="hidden" class="form-control" name="profileID" value=${profileID}>
 									</div>
 									<input type="submit" value="Pending Dates" class="btn btn-success"/>
 								</form>
 								<br/>
 								<form action="pastDates">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value=${email}>
+										<input type="hidden" class="form-control" name="profileID" value=${profileID}>
 									</div>
 									<input type="submit" value="Past Dates" class="btn btn-success"/>
 								</form>
 								<br/>
 								<form action="favoritesList">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value=${email}>
+										<input type="hidden" class="form-control" name="profileID" value=${profileID}>
 									</div>
 									<input type="submit" value="Favorites" class="btn btn-success"/>
 								</form>
@@ -107,14 +107,14 @@
 								<br/>
 								<form action="highlyRated">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value=${email}>
+										<input type="hidden" class="form-control" name="profileID" value=${profileID}>
 									</div>
 									<input type="submit" value="Highly Rated Profiles" class="btn btn-success"/>
 								</form>
 								<br/>
 								<form action="popularGeoLocation">
 									<div class="form-group">
-										<input type="hidden" class="form-control" name="email" value=${email}>
+										<input type="hidden" class="form-control" name="profileID" value=${profileID}>
 									</div>
 									<input type="submit" value="Popular Geo Locations" class="btn btn-success"/>
 								</form>

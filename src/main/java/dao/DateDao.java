@@ -21,11 +21,11 @@ public class DateDao {
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
 			
-			String cmd = String.format("INSERT INTO Date VALUES ('%s', '%s', '%s', '%s', '%s', %d, '%s', %d, %d)", 
+			String cmd = String.format("INSERT INTO Date VALUES ('%s', '%s', '%s', %s, '%s', %d, '%s', %d, %d)", 
 					date.getUser1ID(),
 					date.getUser2ID(),
 					date.getCustRepresentative(),
-					date.getDate(),
+					date.getDate() != null ? String.format("'%s'", date.getDate()) : "NOW()",
 					date.getGeolocation(),
 					date.getBookingfee(),
 					date.getComments(),
@@ -67,6 +67,7 @@ public class DateDao {
 			}
         } catch(Exception e) {
         	System.out.println(e);
+        	return null;
         }
 
         return dates;
@@ -98,6 +99,7 @@ public class DateDao {
 			}
         } catch(Exception e) {
         	System.out.println(e);
+        	return null;
         }
 
         return dates;
@@ -129,6 +131,7 @@ public class DateDao {
 			}
         } catch(Exception e) {
         	System.out.println(e);
+        	return null;
         }
 
         return dates;
@@ -159,6 +162,7 @@ public class DateDao {
 			}
         } catch(Exception e) {
         	System.out.println(e);
+        	return null;
         }
 
         return dates;
@@ -191,6 +195,7 @@ public class DateDao {
 			}
         } catch(Exception e) {
         	System.out.println(e);
+        	return null;
         }
 
         return dates;
@@ -200,6 +205,7 @@ public class DateDao {
     	Date date = new Date();
     	date.setUser1ID(user1);
     	date.setUser2ID(user2);
+    	date.setCustRepresentative("111-11-1111");
     	addDate(date);
         return "Successfull date b/w " + user1 + " and " + user2;
     }
@@ -209,10 +215,11 @@ public class DateDao {
     		Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			String cmd = String.format("DELETE FROM Date Where INSTR(%s, Profile1) > 0 AND INSTR(%s, Profile2) > 0 AND INSTR(%s, Date_Time) > 0", dateID, dateID, dateID);
-			st.executeQuery(cmd);
+			String cmd = String.format("DELETE FROM Date Where CONCAT(Profile1, Profile2, Date(Date_Time)) = '%s'", dateID);
+			st.execute(cmd);
     	} catch(Exception e) {
     		System.out.println(e);
+    		return "failure";
     	}
     	
         return "Date - " + dateID + " is now cancelled";
@@ -223,10 +230,11 @@ public class DateDao {
     		Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			String cmd = String.format("UPDATE DATE SET Comment = %s Where INSTR(%s, Profile1) > 0 AND INSTR(%s, Profile2) > 0 AND INSTR(%s, Date_Time) > 0", comment, dateID, dateID, dateID);
-			st.executeQuery(cmd);
+			String cmd = String.format("UPDATE DATE SET Comments = '%s' Where CONCAT(Profile1, Profile2, Date(Date_Time)) = '%s'", comment, dateID);
+			st.execute(cmd);
     	} catch(Exception e) {
     		System.out.println(e);
+    		return "failure";
     	}
         return "Date - " + dateID + " has new comment - " + comment;
     }
@@ -241,8 +249,8 @@ public class DateDao {
 			return rs.getString(0);
     	} catch(Exception e) {
     		System.out.println(e);
+    		return null;
     	}
-        return null;
     }
 
     public List<Date> getPendingDates(String user) {
@@ -252,12 +260,10 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
-					+ "FROM Profile AS P "
-					+ "INNER JOIN Date AS D "
-					+ "ON P.ProfileID=D.Profile1 "
-					+ "WHERE P.ProfileID='" + user + "' AND "
-					+ "D.Date_Time >= NOW()");
+			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.* "
+					+ "FROM Profile AS P INNER JOIN Date AS D "
+					+ "ON P.ProfileID=D.Profile1 OR P.ProfileID=D.Profile2 "
+					+ "WHERE P.ProfileID='" + user + "' AND D.Date_Time >= NOW();");
 			
 			while(rs.next()) {
 				Date date = new Date();
@@ -288,10 +294,10 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.CustRep, D.Date_Time, D.Location "
+			ResultSet rs = st.executeQuery("SELECT P.ProfileID, D.* "
 					+ "FROM Profile AS P "
 					+ "INNER JOIN Date AS D "
-					+ "ON P.ProfileID=D.Profile1 "
+					+ "ON P.ProfileID=D.Profile1 OR P.ProfileID=D.Profile2 "
 					+ "WHERE P.ProfileID= '" + user + "' AND "
 					+ "D.Date_Time < NOW() ");
 			
@@ -324,14 +330,33 @@ public class DateDao {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("SELECT D.Location  "
 					+ "FROM Date AS D "
-					+ "GROUP BY D.Location "
-					+ "ORDER BY COUNT(D.Location) DESC"
-					+ "WHERE D.profile1 = " + user);
-			return rs.getString(0);
+					+ "WHERE D.Profile1 = '" + user
+					+ "' GROUP BY D.Location "
+					+ "ORDER BY COUNT(D.Location) DESC ");
+			rs.next();
+			return rs.getString(1);
         } catch(Exception e) {
         	System.out.println(e);
         }
     	return null;
+    }
+    
+    public int getMostPopularLocationRating(String user) {
+    	try {
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT COUNT(D.LOCATION)  "
+					+ "FROM Date AS D "
+					+ "WHERE D.Profile1 = '" + user
+					+ "' GROUP BY D.Location "
+					+ "ORDER BY COUNT(D.Location) DESC ");
+			rs.next();
+			return rs.getInt(1);
+        } catch(Exception e) {
+        	System.out.println(e);
+        	return 0;
+        }
     }
 
 
@@ -343,10 +368,9 @@ public class DateDao {
         	Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection(dbpath, dbuser, dbpass);
 			Statement st = con.createStatement();
-
+			
 			String cmd = String.format("SELECT * FROM Profile "
 					+ "WHERE ProfileID = '%s' "
-					+ "AND INSTR(Profile.Hobbies, hobies) > 0 "
 					+ "AND OwnerSSN <> Profile.OwnerSSN", user);
 			ResultSet rs = st.executeQuery(cmd);
 			

@@ -31,7 +31,9 @@ public class EmployeeDao {
         			+ employee.getPassword() + "\', \'" + employee.getFirstName() + "\', \'" + employee.getLastName()
         			+ "\', \'" + employee.getAddress() + "\', \'" + employee.getCity() + "\', \'" + employee.getState()
         			+ "\', " + employee.getZipCode() + ", NULL, NULL, \'" + employee.getEmail() + "\', \'"
-        			+ employee.getTelephone() + "\'); INSERT INTO Employee (\'" + employee.getEmployeeID() + "\', \'"
+        			+ employee.getTelephone() + "\')");
+        	con.createStatement().execute(
+        			"INSERT INTO Employee (\'" + employee.getEmployeeID() + "\', \'"
         			+ employee.getEmployeeRole() + "\', \'" + employee.getStartDate() + "\', "
         			+ employee.getHourlyRate() + ")");
         } catch (Exception e) {

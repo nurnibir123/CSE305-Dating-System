@@ -175,9 +175,12 @@ public class CustomerDao {
         		"INSERT INTO Person VALUES (\'" + customer.getUserID() + "\', \'" + customer.getPassword() + "\', \'"
         		+ customer.getFirstName() + "\', \'" + customer.getLastName() + "\', \'" + customer.getAddress() + "\', \'"
         		+ customer.getCity() + "\', \'" + customer.getState() + "\', " + customer.getZipCode() + ", NULL, NULL, \'"
-        		+ customer.getEmail() + "\', \'" + customer.getTelephone() + "\'); INSERT INTO User VALUES (\'" + customer.getUserID()
+        		+ customer.getEmail() + "\', \'" + customer.getTelephone() + "\')");
+        	con.createStatement().execute("INSERT INTO User VALUES (\'" + customer.getUserID()
         		+ "\', \'" + customer.getPpp() + "\', " + customer.getRating() + ", \'" + customer.getDateLastActive()
-        		+ "\'); INSERT INTO Account VALUES (\'" + customer.getUserID() + "\', " + customer.getCreditCard() + ", \'"
+        		+ "\')");
+        	con.createStatement().execute(
+        		"INSERT INTO Account VALUES (\'" + customer.getUserID() + "\', " + customer.getCreditCard() + ", \'"
         		+ customer.getAccNum() + "\', \'" + customer.getAccCreateDate() + "\')");
         	return "success";
 		} catch (Exception e) {
